@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 function Login() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
-            {/* Header phía trên (logo và link sign up) */}
+            {/* Header p
             <div className="absolute top-4 left-4 flex items-center space-x-2">
                 <div className="w-6 h-6 bg-green-200 rounded-full"></div>
                 <span className="font-bold text-gray-700">Logo here</span>
