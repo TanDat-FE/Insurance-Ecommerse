@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <MainLayout>
-        <HomeInf />
+        <Login/>
       </MainLayout>
     </>
   );
