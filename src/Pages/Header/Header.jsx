@@ -6,7 +6,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="flex justify-between items-center py-4 px-4 md:px-8 w-full max-w-[1280px] mx-auto border-b border-gray-200">
+    <header className="flex justify-between items-center py-4 px-4 md:px-8 w-full max-w-[1280px] mx-auto border-b shadow-md border-gray-200">
       <div className="flex items-center">
         <div className="relative w-6 h-6 flex items-center justify-center">
           <div className="w-6 h-6 border-2 border-blue-500 rounded-full flex items-center justify-center"></div>
