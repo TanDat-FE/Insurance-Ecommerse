@@ -6,6 +6,7 @@ import Header from "@/Pages/Header/Header";
 import InsuranceGuide from "@components/purchase/InsuranceGuide";
 import FAQ from "@components/faqs/FAQs";
 import Info from "@components/Info/Info";
+import Products from "@/Pages/Products/Products";
 
 function Home() {
   return (
@@ -18,6 +19,7 @@ function Home() {
       <FAQ />
       <Contact />
       <Footer />
+      <Products />
     </div>
   );
 }
