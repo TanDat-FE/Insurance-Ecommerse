@@ -1,7 +1,7 @@
 function MainLayout({ children }) {
   return (
     <main className="flex justify-center">
-      <div>{children}</div>
+      <div className="w-7xl">{children}</div>
     </main>
   );
 }
