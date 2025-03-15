@@ -27,7 +27,7 @@ const Header = () => {
 
       <div className="hidden md:flex items-center space-x-2">
         <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-        <Link to="/">Login</Link>
+        <Link to="/Login">Login</Link>
       </div>
 
       <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
