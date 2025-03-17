@@ -1,12 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom"; // ✅ Thêm BrowserRouter
-import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+import "./index.css"; // ✅ Giữ lại một lần duy nhất
 import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter> {/* ✅ Bọc App trong BrowserRouter */}
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>
