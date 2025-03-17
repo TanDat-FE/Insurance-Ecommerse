@@ -1,91 +1,108 @@
-import ButtonIcon from "@components/Button/ButtonIcon/ButtonIcon";
-import { BsFillSendFill } from "react-icons/bs";
-import { FcGoogle } from "react-icons/fc";
-import { BiLogoFacebookCircle } from "react-icons/bi";
-import DividerWithOptions from "@components/DividerWithOptions/DividerWithOptions";
-import InputCommon from "@components/InputCommon/InputCommon";
-import { useState } from "react";
-import { Switch } from "antd";
-import ButtonSubmit from "@components/Button/ButtonSubmit/ButtonSubmit";
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function Login() {
-  const [isRegister, setIsRegister] = useState(false);
+const Login = () => {
+  const [apiError, setApiError] = useState("");
 
-  const handleToggle = () => {
-    setIsRegister(!isRegister);
+  const loginValidationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    password: Yup.string()
+      .min(6, "Minimum 6 characters")
+      .required("Password is required"),
+  });
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setApiError("");
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/auth/login",
+        values,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("Login Success:", response.data);
+    } catch (error) {
+      console.error("Login Failed:", error.response?.data);
+      setApiError(error.response?.data?.message || "Login failed");
+    }
+    setSubmitting(false);
   };
-  console.log(isRegister);
 
   return (
-    <div className="w-[600px] h-auto bg-[#f1f2f6] rounded-lg">
-      <div className="flex justify-around items-center pt-10 ">
-        <div className="flex justify-center items-center cursor-pointer">
-          <BsFillSendFill size={30} color="#20dc49" />
-          <div className="text-base font-semibold">Logo here</div>
-        </div>
-        <div className="flex justify-center items-end gap-2">
-          <div className="text-sm font-light">
-            {isRegister ? "have an account?" : "Don't have an account?"}
-          </div>
-          <span
-            className="text-[#20dc49] font-semibold cursor-pointer"
-            onClick={handleToggle}
-          >
-            Sign up!
-          </span>
-        </div>
-      </div>
-      <div className="mt-12">
-        <div className="text-4xl font-bold mb-2">
-          {isRegister ? "Get Started With MAKER" : "Wellcome Back"}
-        </div>
-        <div className="text-lg font-medium">
-          {isRegister ? "Getting started is easy" : "Login into your account"}
-        </div>
-        <div className="flex justify-center gap-5 mt-12">
-          <ButtonIcon
-            isPrimary={true}
-            icon={<FcGoogle size={22} />}
-            content={"Google"}
-          />
-          <ButtonIcon
-            isPrimary={false}
-            icon={<BiLogoFacebookCircle size={22} />}
-            content={"Facebook"}
-          />
-        </div>
-      </div>
-      <DividerWithOptions />
-      {isRegister && <InputCommon type={"text"} placeholder={"Full Name"} />}
-      <InputCommon
-        type={"email"}
-        placeholder={isRegister ? "Enter Email" : "Email"}
-      />
-      <InputCommon type={"password"} placeholder={"Password"} />
-      {isRegister && (
-        <InputCommon type={"password"} placeholder={"Confirm Password"} />
-      )}
-      {!isRegister && (
-        <div className="flex justify-around items-center gap-5 mb-8">
-          {/* {!isRegister && ( */}
-          <div className="flex justify-center items-center gap-2 pl-12">
-            <Switch />
-            <span>Remember me</span>
-          </div>
-          {/* )} */}
-          <div className="text-red-500 pr-10">Recover Password</div>
-        </div>
-      )}
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-sm md:max-w-md bg-white px-6 md:px-8 py-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center mb-4">InsureState</h2>
+        <h3 className="text-lg md:text-xl font-semibold text-center mb-4">
+          Login your account!
+        </h3>
+        {apiError && <p className="text-red-500 text-center">{apiError}</p>}
 
-      <div className="pb-8">
-        {isRegister ? (
-          <ButtonSubmit content={"Create Account"} />
-        ) : (
-          <ButtonSubmit content={"Log In"} isPrimary={true} />
-        )}
+        <Formik
+          initialValues={{ username: "", password: "" }}
+          validationSchema={loginValidationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-4">
+              <Field
+                type="text"
+                name="username"
+                className="w-full p-3 border rounded text-sm md:text-base"
+                placeholder="Email"
+              />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+
+              <Field
+                type="password"
+                name="password"
+                className="w-full p-3 border rounded text-sm md:text-base"
+                placeholder="Password"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Logging in..." : "Continue"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+
+        <div className="text-center mt-4">
+          <p className="text-sm">Or sign in with:</p>
+          <div className="flex justify-center space-x-4 mt-2">
+            <FaFacebook className="text-blue-600 cursor-pointer" size={22} />
+            <FaGoogle className="text-red-600 cursor-pointer" size={22} />
+            <FaApple className="text-black cursor-pointer" size={22} />
+          </div>
+        </div>
+
+        <p className="text-center text-sm mt-6">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

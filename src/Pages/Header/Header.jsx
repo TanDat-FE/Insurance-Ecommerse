@@ -1,6 +1,7 @@
 import MobileMenu from "@/Pages/Header/MobileMenu";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { menuItems } from "./constants.js";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,17 +18,18 @@ const Header = () => {
       </div>
 
       <nav className="hidden md:flex space-x-6">
-        <a href="#">Product</a>
-        <a href="#">My document</a>
-        <a href="#">Claims</a>
-        <a href="#">Bills</a>
-        <a href="#">Get a quote</a>
-        <a href="#">Find an agent</a>
+        {menuItems.map((item, index) => {
+          return (
+            <Link key={index} to={item.src}>
+              {item.content}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="hidden md:flex items-center space-x-2">
         <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-        <Link to="/">Login</Link>
+        <Link to="/Login">Login</Link>
       </div>
 
       <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
