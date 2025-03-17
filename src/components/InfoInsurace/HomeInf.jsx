@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import ButtonIcon from "@components/Button/ButtonIcon/ButtonIcon";
 
 export default function HomeInf() {
   const [zipCode, setZipCode] = useState("");
@@ -30,13 +30,7 @@ export default function HomeInf() {
             Talk with an agent about personal price plan to help you save money and help protect you and your property.
             </p>
             <div className="flex justify-center md:justify-start ml-5">
-              <input
-                type="text"
-                value={zipCode}
-                onChange={handleZipCodeChange}
-                placeholder="Zipcode"
-                className="border border-gray-300 rounded-full px-2 py-2  text-center"
-              />
+            <ButtonIcon className="w-64" />
               <button className="bg-blue-500 text-white rounded-full px-4 py-2 ml-4">
                 Find an agent
               </button>
