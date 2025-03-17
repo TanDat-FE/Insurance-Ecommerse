@@ -1,8 +1,7 @@
 import React from "react";
-import AgentList from "./AgentList";
-import Map from "./Map";
-import SearchBar from "../Find_Agent_Results/SearchBar";
-import Footer from "./Footer";
+import Map from "@components/Find_Agent_Results/Map";
+import SearchBar from "@components/Find_Agent_Results/SearchBar";
+import AgentList from "@components/Find_Agent_Results/AgentList";
 
 export default function FindAgentResults() {
   return (
