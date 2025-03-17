@@ -10,15 +10,22 @@ const Login = () => {
 
   const loginValidationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
-    password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
+    password: Yup.string()
+      .min(6, "Minimum 6 characters")
+      .required("Password is required"),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setApiError("");
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/auth/login", values, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/auth/login",
+        values,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       console.log("Login Success:", response.data);
     } catch (error) {
       console.error("Login Failed:", error.response?.data);
@@ -31,9 +38,11 @@ const Login = () => {
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-sm md:max-w-md bg-white px-6 md:px-8 py-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center mb-4">InsureState</h2>
-        <h3 className="text-lg md:text-xl font-semibold text-center mb-4">Login your account!</h3>
+        <h3 className="text-lg md:text-xl font-semibold text-center mb-4">
+          Login your account!
+        </h3>
         {apiError && <p className="text-red-500 text-center">{apiError}</p>}
-        
+
         <Formik
           initialValues={{ username: "", password: "" }}
           validationSchema={loginValidationSchema}
@@ -41,19 +50,41 @@ const Login = () => {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">
-              <Field type="text" name="username" className="w-full p-3 border rounded text-sm md:text-base" placeholder="Email" />
-              <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
-              
-              <Field type="password" name="password" className="w-full p-3 border rounded text-sm md:text-base" placeholder="Password" />
-              <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
-              
-              <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition" disabled={isSubmitting}>
+              <Field
+                type="text"
+                name="username"
+                className="w-full p-3 border rounded text-sm md:text-base"
+                placeholder="Email"
+              />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+
+              <Field
+                type="password"
+                name="password"
+                className="w-full p-3 border rounded text-sm md:text-base"
+                placeholder="Password"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? "Logging in..." : "Continue"}
               </button>
             </Form>
           )}
         </Formik>
-        
+
         <div className="text-center mt-4">
           <p className="text-sm">Or sign in with:</p>
           <div className="flex justify-center space-x-4 mt-2">
@@ -62,10 +93,12 @@ const Login = () => {
             <FaApple className="text-black cursor-pointer" size={22} />
           </div>
         </div>
-        
+
         <p className="text-center text-sm mt-6">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-500 hover:underline">Sign up</Link>
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
