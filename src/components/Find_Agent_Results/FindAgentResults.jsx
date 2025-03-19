@@ -2,7 +2,7 @@ import React from "react";
 import AgentList from "./AgentList";
 import Map from "./Map";
 import SearchBar from "../Find_Agent_Results/SearchBar";
-import Footer from "./Footer";
+import Footer from "@/Pages/Footer/Footer";
 
 export default function FindAgentResults() {
   return (

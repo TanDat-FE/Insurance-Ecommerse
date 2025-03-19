@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -16,20 +17,26 @@ const Login = () => {
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setApiError("");
+    setApiError("");// xóa lỗi cũ
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        values,
+      const response = await axios
+      .post(
+        "https://reqres.in/api/login",
         {
+          email: values.username,
+          password: values.password,
+        },
+        { 
           headers: { "Content-Type": "application/json" },
         }
       );
 
       console.log("Login Success:", response.data);
+      // Lưu token vào cookie 7 ngày
+      Cookies.set("token", response.data.token, { expires: 7 });
     } catch (error) {
       console.error("Login Failed:", error.response?.data);
-      setApiError(error.response?.data?.message || "Login failed");
+      setApiError(error.response?.data?.error || "Login failed");
     }
     setSubmitting(false);
   };
