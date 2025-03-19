@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string().required('Full name is required'),
@@ -27,8 +28,22 @@ export default function SignupForm() {
       terms: false,
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => {
-      console.log('Form Data', values);
+    onSubmit: async (values, { setSubmitting, setStatus }) => {
+      try {
+        const response = await axios.post('https://reqres.in/api/register', {
+          email: values.email,
+          password: values.password,
+        });
+
+        console.log('Registration successful:', response.data);
+        setStatus({ success: 'Registration successful! Token: ' + response.data.token });
+      } catch (error) {
+        console.error('Registration error:', error.response?.data);
+        const errorMessage = error.response?.data?.error || 'Registration failed';
+        setStatus({ error: errorMessage });
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -36,49 +51,119 @@ export default function SignupForm() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-sm md:max-w-md lg:max-w-lg p-6 md:px-8 lg:px-10 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">Create Account</h2>
+        
+        {/* Hiển thị thông báo thành công hoặc lỗi */}
+        {formik.status?.success && (
+          <p className="text-green-500 text-center mb-4">{formik.status.success}</p>
+        )}
+        {formik.status?.error && (
+          <p className="text-red-500 text-center mb-4">{formik.status.error}</p>
+        )}
+
         <form onSubmit={formik.handleSubmit} className="space-y-4">
-          <input type="text" name="fullName" placeholder="Full name *" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('fullName')} />
-          {formik.touched.fullName && formik.errors.fullName && <p className="text-red-500 text-sm">{formik.errors.fullName}</p>}
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full name *"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('fullName')}
+          />
+          {formik.touched.fullName && formik.errors.fullName && (
+            <p className="text-red-500 text-sm">{formik.errors.fullName}</p>
+          )}
 
-          <input type="date" name="dob" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('dob')} />
-          {formik.touched.dob && formik.errors.dob && <p className="text-red-500 text-sm">{formik.errors.dob}</p>}
+          <input
+            type="date"
+            name="dob"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('dob')}
+          />
+          {formik.touched.dob && formik.errors.dob && (
+            <p className="text-red-500 text-sm">{formik.errors.dob}</p>
+          )}
 
-          <input type="email" name="email" placeholder="Work email *" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('email')} />
-          {formik.touched.email && formik.errors.email && <p className="text-red-500 text-sm">{formik.errors.email}</p>}
+          <input
+            type="email"
+            name="email"
+            placeholder="Work email *"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('email')}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-red-500 text-sm">{formik.errors.email}</p>
+          )}
 
-          <input type="text" name="phone" placeholder="Phone number *" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('phone')} />
-          {formik.touched.phone && formik.errors.phone && <p className="text-red-500 text-sm">{formik.errors.phone}</p>}
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone number *"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('phone')}
+          />
+          {formik.touched.phone && formik.errors.phone && (
+            <p className="text-red-500 text-sm">{formik.errors.phone}</p>
+          )}
 
-          <input type="text" name="zipCode" placeholder="Zip Code *" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('zipCode')} />
-          {formik.touched.zipCode && formik.errors.zipCode && <p className="text-red-500 text-sm">{formik.errors.zipCode}</p>}
+          <input
+            type="text"
+            name="zipCode"
+            placeholder="Zip Code *"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('zipCode')}
+          />
+          {formik.touched.zipCode && formik.errors.zipCode && (
+            <p className="text-red-500 text-sm">{formik.errors.zipCode}</p>
+          )}
 
-          <input type="password" name="password" placeholder="Password *" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('password')} />
-          {formik.touched.password && formik.errors.password && <p className="text-red-500 text-sm">{formik.errors.password}</p>}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password *"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('password')}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-red-500 text-sm">{formik.errors.password}</p>
+          )}
 
-          <input type="password" name="confirmPassword" placeholder="Confirm password" 
-            className="w-full p-3 border rounded text-sm md:text-base" {...formik.getFieldProps('confirmPassword')} />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-red-500 text-sm">{formik.errors.confirmPassword}</p>}
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm password"
+            className="w-full p-3 border rounded text-sm md:text-base"
+            {...formik.getFieldProps('confirmPassword')}
+          />
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <p className="text-red-500 text-sm">{formik.errors.confirmPassword}</p>
+          )}
 
           <div className="flex items-center text-sm">
-            <input type="checkbox" name="terms" className="mr-2 w-4 h-4" {...formik.getFieldProps('terms')} />
+            <input
+              type="checkbox"
+              name="terms"
+              className="mr-2 w-4 h-4"
+              {...formik.getFieldProps('terms')}
+            />
             <label>
-              I agree to the <span className="font-semibold">Terms of Service</span> and <span className="font-semibold">Privacy Policy</span>
+              I agree to the <span className="font-semibold">Terms of Service</span> and{' '}
+              <span className="font-semibold">Privacy Policy</span>
             </label>
           </div>
-          {formik.touched.terms && formik.errors.terms && <p className="text-red-500 text-sm">{formik.errors.terms}</p>}
+          {formik.touched.terms && formik.errors.terms && (
+            <p className="text-red-500 text-sm">{formik.errors.terms}</p>
+          )}
 
-          <button type="submit" className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200">
-            Create
+          <button
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200 disabled:bg-blue-300"
+          >
+            {formik.isSubmitting ? 'Creating...' : 'Create'}
           </button>
         </form>
         <p className="text-center mt-4 text-sm">
-          Already a member? <span className="text-blue-500 hover:underline cursor-pointer">Log in</span>
+          Already a member?{' '}
+          <span className="text-blue-500 hover:underline cursor-pointer">Log in</span>
         </p>
       </div>
     </div>
